@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_17_221121) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_19_090842) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_221121) do
     t.string "home_logo", null: false
     t.string "away_logo", null: false
     t.integer "fixture_id"
+    t.index ["fixture_id"], name: "index_matches_on_fixture_id", unique: true
   end
 
   create_table "standings", force: :cascade do |t|
@@ -69,6 +70,30 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_221121) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["team_id"], name: "index_standings_on_team_id"
+  end
+
+  create_table "statistics", force: :cascade do |t|
+    t.integer "fixture_id", null: false
+    t.integer "shots_on_goal", null: false
+    t.integer "shots_off_goal", null: false
+    t.integer "total_shots", null: false
+    t.integer "blocked_shots", null: false
+    t.integer "shots_insidebox", null: false
+    t.integer "shots_outsidebox", null: false
+    t.integer "fouls", null: false
+    t.integer "corner_kicks", null: false
+    t.integer "offside", null: false
+    t.integer "ball_possession", null: false
+    t.integer "yellow_cards", null: false
+    t.integer "red_cards", null: false
+    t.integer "total_passes", null: false
+    t.integer "passes_accurate", null: false
+    t.integer "passes_success", null: false
+    t.integer "expected_goals", null: false
+    t.integer "goals_prevented", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fixture_id"], name: "index_statistics_on_fixture_id", unique: true
   end
 
   create_table "teams", force: :cascade do |t|
@@ -108,5 +133,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_221121) do
   add_foreign_key "favorites", "teams"
   add_foreign_key "favorites", "users"
   add_foreign_key "standings", "teams"
+  add_foreign_key "statistics", "matches", column: "fixture_id", primary_key: "fixture_id"
   add_foreign_key "teams", "leagues"
 end
